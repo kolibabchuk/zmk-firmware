@@ -70,6 +70,8 @@ int zmk_behavior_invoke_binding(const struct zmk_behavior_binding *src_binding,
     // relative to absolute before being invoked
     struct zmk_behavior_binding binding = *src_binding;
 
+    LOG_DBG("Get behavior binding");
+
     const struct device *behavior = zmk_behavior_get_binding(binding.behavior_dev);
 
     if (!behavior) {

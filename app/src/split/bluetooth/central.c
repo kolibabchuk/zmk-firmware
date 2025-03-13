@@ -60,6 +60,7 @@ struct peripheral_slot {
     uint16_t update_hid_indicators;
 #endif // IS_ENABLED(CONFIG_ZMK_SPLIT_PERIPHERAL_HID_INDICATORS)
     uint16_t selected_physical_layout_handle;
+    uint8_t udpate_bat_st;
     uint8_t position_state[POSITION_STATE_DATA_LEN];
     uint8_t changed_positions[POSITION_STATE_DATA_LEN];
 };
@@ -219,7 +220,7 @@ int release_peripheral_slot(int index) {
 #if IS_ENABLED(CONFIG_ZMK_SPLIT_PERIPHERAL_HID_INDICATORS)
     slot->update_hid_indicators = 0;
 #endif // IS_ENABLED(CONFIG_ZMK_SPLIT_PERIPHERAL_HID_INDICATORS)
-
+    slot->udpate_bat_st = 0;
     return 0;
 }
 
@@ -620,6 +621,12 @@ static uint8_t split_central_chrc_discovery_func(struct bt_conn *conn,
             LOG_DBG("Found update HID indicators handle");
             slot->update_hid_indicators = bt_gatt_attr_value_handle(attr);
 #endif // IS_ENABLED(CONFIG_ZMK_SPLIT_PERIPHERAL_HID_INDICATORS)
+
+        } else if (!bt_uuid_cmp(((struct bt_gatt_chrc *)attr->user_data)->uuid,
+                            BT_UUID_DECLARE_128(ZMK_SPLIT_BT_CALL_BAT_ST_ASKED_UUID))) {
+            LOG_DBG("Found update bat asked handle");
+            slot->udpate_bat_st = bt_gatt_attr_value_handle(attr);
+
 #if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
         } else if (!bt_uuid_cmp(((struct bt_gatt_chrc *)attr->user_data)->uuid,
                                 BT_UUID_BAS_BATTERY_LEVEL)) {
@@ -1120,6 +1127,7 @@ static int split_bt_invoke_behavior_payload(struct central_cmd_wrapper payload_w
         }
     }
 
+    LOG_DBG("Submit to queue");
     k_work_submit_to_queue(&split_central_split_run_q, &split_central_split_run_work);
 
     return 0;
@@ -1128,6 +1136,24 @@ static int split_bt_invoke_behavior_payload(struct central_cmd_wrapper payload_w
 static int finish_init();
 
 static bool settings_loaded = false;
+
+static uint8_t bat_d = 0;
+static void split_central_bat_st_asked_callback(struct k_work *work) {
+    for (int i = 0; i < ZMK_SPLIT_BLE_PERIPHERAL_COUNT; i++) {
+        if (peripherals[i].state != PERIPHERAL_SLOT_STATE_CONNECTED) {
+            LOG_DBG("Skip battery status asked for unconnected peripheral %d %d", peripherals[i].state, peripherals[i].udpate_bat_st);
+            continue;
+        }
+        int err = bt_gatt_write_without_response(peripherals[i].conn, peripherals[i].udpate_bat_st, &bat_d, sizeof(bat_d), true);
+        if (err) {
+            LOG_ERR("Failed to send battery status asked to peripheral (err %d)", err);
+        }
+    }
+}
+static K_WORK_DEFINE(split_central_bat_st_asked, split_central_bat_st_asked_callback);
+int zmk_split_bt_call_bat_st_asked() {
+    return k_work_submit_to_queue(&split_central_split_run_q, &split_central_bat_st_asked);
+}
 
 #if IS_ENABLED(CONFIG_SETTINGS)
 
