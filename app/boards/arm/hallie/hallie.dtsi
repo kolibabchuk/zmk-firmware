@@ -16,8 +16,8 @@
 };
 
 / {
-	model = "harper";
-	compatible = "harper";
+	model = "hallie";
+	compatible = "hallie";
 
 	chosen {
 		zephyr,code-partition = &code_partition;

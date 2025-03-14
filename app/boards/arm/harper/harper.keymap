@@ -61,7 +61,7 @@
                                                                                                         &kp RGUI                                                               &kp RCTRL
                         >;
 
-                        sensor-bindings = <&inc_dec_kp PG_DN PG_UP &scroll_l_r>;
+                        sensor-bindings = <&inc_dec_kp PG_UP PG_DN &scroll_l_r>;
                 };
 
                 raise_layer {
@@ -74,7 +74,7 @@
                                                                                                         &kp RGUI                                                       &kp RCTRL
                         >;
 
-                        sensor-bindings = <&inc_dec_kp DOWN_ARROW UP_ARROW &inc_dec_kp RIGHT_ARROW LEFT_ARROW>;
+                        sensor-bindings = <&inc_dec_kp UP_ARROW DOWN_ARROW &inc_dec_kp LEFT_ARROW RIGHT_ARROW>;
                 };
                 adjust_layer {
                         bindings = <
@@ -86,7 +86,7 @@
                                                                                                                                                                                                                                 &kp RGUI                                                     &kp RCTRL
                         >;
 
-                        sensor-bindings = <&inc_dec_kp DOWN_ARROW UP_ARROW &inc_dec_kp RIGHT_ARROW LEFT_ARROW>;
+                        sensor-bindings = <&inc_dec_kp UP_ARROW DOWN_ARROW &inc_dec_kp LEFT_ARROW RIGHT_ARROW>;
                 };
 
                 extra1 {
