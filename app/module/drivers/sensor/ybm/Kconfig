@@ -1,0 +1,49 @@
+menuconfig YBM
+    bool "BM Incremental Encoder Sensor from YSA"
+    default y
+    depends on DT_HAS_YSA_YBM_ENABLED
+    depends on GPIO
+    help
+      Enable driver for BM YSA incremental encoder sensors.
+
+if YBM
+
+choice YBM_TRIGGER_MODE
+    prompt "Trigger mode"
+    default YBM_TRIGGER_NONE
+    help
+      Specify the type of triggering to be used by the driver.
+
+config YBM_TRIGGER_NONE
+    bool "No trigger"
+
+config YBM_TRIGGER_GLOBAL_THREAD
+    bool "Use global thread"
+    depends on GPIO
+    select YBM_TRIGGER
+
+config YBM_TRIGGER_OWN_THREAD
+    bool "Use own thread"
+    depends on GPIO
+    select YBM_TRIGGER
+
+endchoice
+
+config YBM_TRIGGER
+    bool
+
+config YBM_THREAD_PRIORITY
+    int "Thread priority"
+    depends on YBM_TRIGGER_OWN_THREAD
+    default 10
+    help
+      Priority of thread used by the driver to handle interrupts.
+
+config YBM_THREAD_STACK_SIZE
+    int "Thread stack size"
+    depends on YBM_TRIGGER_OWN_THREAD
+    default 1024
+    help
+      Stack size of thread used by the driver to handle interrupts.
+
+endif # YBM

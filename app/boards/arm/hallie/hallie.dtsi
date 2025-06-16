@@ -1,7 +1,8 @@
 
 /dts-v1/;
 
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 180
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 800
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 220
 
 #include <nordic/nrf52840_qiaa.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -83,30 +84,25 @@
 	};
 
 	left_encoder: encoder_left {
-		compatible = "alps,ec11";
+		compatible = "ysa,ybm";
 		a-gpios = <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		b-gpios = <&gpio1  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		steps = <18>;
 		status = "disabled";
-		debounce-ms = <6>;
-		debounce-scan-period-ms = <6>;
-		model = "r1";
 	};
 
 	right_encoder: encoder_right {
-		compatible = "alps,ec11";
+		compatible = "ysa,ybm";
 		a-gpios = <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		b-gpios = <&gpio1  0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 		steps = <18>;
 		status = "disabled";
-		debounce-ms = <6>;
-		debounce-scan-period-ms = <6>;
-		model = "r1";
 	};
 
 	sensors {
 		compatible = "zmk,keymap-sensors";
 		sensors = <&left_encoder &right_encoder>;
+		triggers-per-rotation = <18>;
 	};
 
 	scroll_u_d: behavior_sensor_rotate_mouse_wheel_up_down {
