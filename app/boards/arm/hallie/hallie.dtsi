@@ -1,8 +1,8 @@
 
 /dts-v1/;
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 800
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 220
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1250
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 80
 
 #include <nordic/nrf52840_qiaa.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
