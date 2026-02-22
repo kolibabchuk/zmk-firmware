@@ -48,8 +48,8 @@
 
         // Show which output is active (USB/BLE)
         [LED_EVENT_OUTPUT] = {
-            {.arg = 0, .priority = 90, .period = 0, .cmd_len = 3, { CMD(200, 100, 0, 0, 0), WAIT(100), CMD(200, 100, 0, 0, 0) }}, // USB
-            {.arg = 1, .priority = 90, .period = 0, .cmd_len = 3, { CMD(200, 0, 100, 100, 100), WAIT(100), CMD(200, 0, 100, 100, 100) }}, // BLE
+            {.arg = 1, .priority = 90, .period = 0, .cmd_len = 3, { CMD(200, 100, 0, 0, 0), WAIT(100), CMD(200, 100, 0, 0, 0) }}, // USB (ZMK_TRANSPORT_USB=1)
+            {.arg = 2, .priority = 90, .period = 0, .cmd_len = 3, { CMD(200, 0, 100, 100, 100), WAIT(100), CMD(200, 0, 100, 100, 100) }}, // BLE (ZMK_TRANSPORT_BLE=2)
         },
 
         // Show BLE profile / connection / disconnection / clearing pairing info
