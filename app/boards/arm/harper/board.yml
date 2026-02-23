@@ -1,0 +1,9 @@
+boards:
+  - name: harper_left
+    vendor: splitted.space
+    socs:
+      - name: nrf52840
+  - name: harper_right
+    vendor: splitted.space
+    socs:
+      - name: nrf52840
